@@ -3,6 +3,17 @@ using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.AI;
 
+/* 
+Monster behavior
+1. Go to new room or stay
+	- if player in room higher chance to stay
+2. Search room
+    2b.check hiding spot or look around
+        -> if player in check hiding spot 
+            - roar and kill
+	    -> if not, go back to 1. 
+*/
+
 public class MonsterBehavior : MonoBehaviour
 {
     //Monster components
@@ -22,14 +33,6 @@ public class MonsterBehavior : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-   /* 
-    Monster behavior
-    1. Go to new room or stay
-	    - if player in room higher chance to stay
-    2. Search room
-        2b.check hiding spot or look around
-        2c. if player in check hiding spot -> roar and kill
-	        -> if not, go back to 1. 
-   */
+   
 
 }

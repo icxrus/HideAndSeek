@@ -21,7 +21,7 @@ public class ApplyMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         //Ground Check
         isGrounded = GroundCheck();

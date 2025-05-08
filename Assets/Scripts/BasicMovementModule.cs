@@ -8,7 +8,7 @@ public class BasicMovementModule : MonoBehaviour
 
     [SerializeField]
     private float activeMovementSpeed;
-    private float basicMovementSpeed = 3f;
+    private float basicMovementSpeed = 1.5f;
     private float rotationSpeed = 5f;
     private float animationSmoothTime = 0.15f;
 

@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(BasicMovementModule))]
 public class CrouchingModule : MonoBehaviour
 {
-    private float crouchingSpeed = 1.5f;
+    private float crouchingSpeed = 0.75f;
     private bool isCrouching;
 
     private void OnEnable()

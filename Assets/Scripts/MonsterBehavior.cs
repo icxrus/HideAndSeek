@@ -10,7 +10,7 @@ Monster behavior
 2. Search room
     2b.check hiding spot or look around
         -> if player in check hiding spot 
-            - roar and kill
+            - roar and kill player
 	    -> if not, go back to 1. 
 */
 

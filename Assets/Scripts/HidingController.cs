@@ -28,6 +28,7 @@ public class HidingController : MonoBehaviour
         _originalWidth = _characterController.radius;
     }
 
+    // Make player able to fit under hiding spots
     private void Hide()
     {
         if (_inputHandler.CrouchingActive())
@@ -40,6 +41,7 @@ public class HidingController : MonoBehaviour
 
     private void Update()
     {
+        // Reset controller values if no longer hiding
         if (!_inputHandler.CrouchingActive() && !isHidden)
         {
             _characterController.height = _originalHeight;

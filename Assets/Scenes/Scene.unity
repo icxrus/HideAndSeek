@@ -33380,6 +33380,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1230586606}
     m_Modifications:
     - target: {fileID: 1823680023912916, guid: 049ea605b93ec584793aea303acee75e, type: 3}
+      propertyPath: m_Name
+      value: HidingSpot
+      objectReference: {fileID: 0}
+    - target: {fileID: 1823680023912916, guid: 049ea605b93ec584793aea303acee75e, type: 3}
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
@@ -43916,6 +43920,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPathingTarget: {fileID: 0}
   player: {fileID: 996628491}
+  rooms:
+  - {fileID: 893356486}
+  - {fileID: 1559065846}
+  - {fileID: 44856369}
+  movementSpotsRoom0: []
+  movementSpotsRoom1: []
+  movementSpotsRoom2: []
+  hidingSpotsRoom0: []
+  hidingSpotsRoom1: []
+  hidingSpotsRoom2: []
   canSeePlayer: 0
 --- !u!54 &801572702
 Rigidbody:
@@ -116683,7 +116697,7 @@ GameObject:
   - component: {fileID: 4867953119556546}
   - component: {fileID: 4867953119556547}
   m_Layer: 0
-  m_Name: WoodCupboard03
+  m_Name: HidingSpot
   m_TagString: HidingSpot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

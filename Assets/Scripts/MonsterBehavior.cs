@@ -1,5 +1,4 @@
-using System.Threading;
-using UnityEditor.Searcher;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,9 +19,17 @@ public class MonsterBehavior : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
 
+
     //External data
     [SerializeField] private GameObject currentPathingTarget;
     [SerializeField] private GameObject player;
+    [SerializeField] private Transform[] rooms;
+    [SerializeField] private List<Transform> movementSpotsRoom0 = new List<Transform>();
+    [SerializeField] private List<Transform> movementSpotsRoom1 = new List<Transform>();
+    [SerializeField] private List<Transform> movementSpotsRoom2 = new List<Transform>();
+    [SerializeField] private List<Transform> hidingSpotsRoom0 = new List<Transform>();
+    [SerializeField] private List<Transform> hidingSpotsRoom1 = new List<Transform>();
+    [SerializeField] private List<Transform> hidingSpotsRoom2 = new List<Transform>();
 
     //Variables
     [SerializeField] private bool canSeePlayer = false;
@@ -31,8 +38,59 @@ public class MonsterBehavior : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+
+        GetMovementSpots(rooms);
+        GetHidingSpots(rooms);
     }
 
-   
+    private void GetMovementSpots(Transform[] _rooms)
+    {
+        for (int i = 0; i < _rooms.Length; i++)
+        {
+            foreach (Transform child in _rooms[i].GetComponentsInChildren<Transform>())
+            {
+                if (child.CompareTag("MovementSpot"))
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            movementSpotsRoom0.Add(child);
+                            break;
+                        case 1:
+                            movementSpotsRoom1.Add(child);
+                            break;
+                        case 2:
+                            movementSpotsRoom2.Add(child);
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void GetHidingSpots(Transform[] _rooms)
+    {
+        for (int i = 0; i < _rooms.Length; i++)
+        {
+            foreach (Transform child in _rooms[i].GetComponentsInChildren<Transform>())
+            {
+                if (child.CompareTag("HidingSpot"))
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            hidingSpotsRoom0.Add(child);
+                            break;
+                        case 1:
+                            hidingSpotsRoom1.Add(child);
+                            break;
+                        case 2:
+                            hidingSpotsRoom2.Add(child);
+                            break;
+                    }
+                }
+            }
+        }
+    }
 
 }

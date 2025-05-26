@@ -19,7 +19,6 @@ public class MonsterBehavior : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
 
-
     //External data
     [SerializeField] private GameObject currentPathingTarget;
     [SerializeField] private GameObject player;
@@ -43,6 +42,7 @@ public class MonsterBehavior : MonoBehaviour
         GetHidingSpots(rooms);
     }
 
+    #region Data Getters
     private void GetMovementSpots(Transform[] _rooms)
     {
         for (int i = 0; i < _rooms.Length; i++)
@@ -92,5 +92,7 @@ public class MonsterBehavior : MonoBehaviour
             }
         }
     }
+    #endregion
+
 
 }

@@ -10,6 +10,7 @@ TagManager:
   - Room1
   - Room2
   - CheckPoint
+  - MovementSpot
   layers:
   - Default
   - TransparentFX

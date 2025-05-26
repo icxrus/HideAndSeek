@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Ground
   - HidingSpot
+  - Room0
+  - Room1
+  - Room2
+  - CheckPoint
   layers:
   - Default
   - TransparentFX
@@ -13,7 +17,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Stool
   - 
   - 
   - 

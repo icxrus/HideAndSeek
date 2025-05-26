@@ -19,8 +19,10 @@ public class MonsterBehavior : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
 
+    //Pathing
+    [SerializeField] private Transform currentPathingTarget;
+
     //External data
-    [SerializeField] private GameObject currentPathingTarget;
     [SerializeField] private GameObject player;
     [SerializeField] private Transform[] rooms;
     [SerializeField] private List<Transform> movementSpotsRoom0 = new List<Transform>();

@@ -1,8 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 
 /* 
 Monster behavior
@@ -37,20 +37,24 @@ public class MonsterBehavior : MonoBehaviour
     //Variables
     [SerializeField] private bool canSeePlayer = false;
 
+    //Monster Logic Variables
     private enum MonsterState { Idle, Moving, Searching, GameOver }
     private MonsterState currentState;
 
     [SerializeField] private float baseStayChance = 0.5f;
-    private int currentRoomIndex;
+    public int currentRoomIndex;
 
     private Coroutine searchRoutine;
     private bool loopActive = true;
 
+    //Audio
+    private AudioHandler audioHandler;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        audioHandler = player.GetComponent<AudioHandler>();
 
         currentState = MonsterState.Idle;
 
@@ -60,7 +64,7 @@ public class MonsterBehavior : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(BehaviorLoop());
+        StartCoroutine(nameof(BehaviorLoop));
     }
 
     private void Update()
@@ -75,6 +79,8 @@ public class MonsterBehavior : MonoBehaviour
             canSeePlayer = true;
         else
             canSeePlayer = false;
+
+        
     }
 
     #region Data Getters
@@ -144,9 +150,11 @@ public class MonsterBehavior : MonoBehaviour
     //BT loop for differing behavior
     private IEnumerator BehaviorLoop()
     {
+        yield return new WaitForSeconds(10f);
+        audioHandler.PlayMonsterRoar();
         while (loopActive)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
 
             switch (currentState)
             {
@@ -161,6 +169,26 @@ public class MonsterBehavior : MonoBehaviour
                         searchRoutine = StartCoroutine(SearchRoom());
                     break;
             }
+
+            if (canSeePlayer)
+            {
+                animator.Play("run2");
+                agent.speed = 5f;
+                agent.destination = player.transform.position;
+                yield return new WaitUntil(() => !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance);
+
+                audioHandler.PlayMonsterRoar();
+                animator.Play("attack4RSpike");
+                Debug.Log("ROAR! Player caught!");
+
+                yield return new WaitForSeconds(5f);
+
+                // game over
+                searchRoutine = null;
+                loopActive = false;
+                currentState = MonsterState.GameOver;
+                StartGameOver();
+            }
         }
     }
 
@@ -169,7 +197,7 @@ public class MonsterBehavior : MonoBehaviour
         Debug.Log("Monster searching room...");
 
         // Decide whether to check hiding spots or just look around
-        bool checkHidingSpot = UnityEngine.Random.value > 0.5f;
+        bool checkHidingSpot = Random.value > 0.5f;
 
         if (checkHidingSpot)
         {
@@ -183,6 +211,7 @@ public class MonsterBehavior : MonoBehaviour
                 yield return new WaitUntil(() => !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance);
 
                 animator.Play("rage");
+                audioHandler.PlayMonsterRoar();
                 currentState = MonsterState.Searching;
                 Debug.Log("Monster searches spot at: " + spot.position);
                 yield return new WaitForSeconds(3f);
@@ -191,10 +220,15 @@ public class MonsterBehavior : MonoBehaviour
                 {
                     Debug.Log("ROAR! Player found!");
                     animator.Play("attack4RSpike");
+                    audioHandler.PlayMonsterRoar();
+
+                    yield return new WaitForSeconds(3f);
+
                     // game over
                     searchRoutine = null;
                     loopActive = false;
                     currentState = MonsterState.GameOver;
+                    StartGameOver();
                     yield break;
                 }
             }
@@ -230,7 +264,7 @@ public class MonsterBehavior : MonoBehaviour
         if (player.GetComponent<PlayerRoomDeterminer>().IsPlayerInRoom(currentRoomIndex))
             stayChance += 0.3f;
 
-        if (UnityEngine.Random.value < stayChance)
+        if (Random.value < stayChance)
         {
             Debug.Log("Monster stays in room.");
             currentState = MonsterState.Searching;
@@ -245,7 +279,7 @@ public class MonsterBehavior : MonoBehaviour
     private void MoveToNewRoom()
     {
         //Randomly select room to move to
-        currentRoomIndex = UnityEngine.Random.Range(0, rooms.Length);
+        currentRoomIndex = Random.Range(0, rooms.Length);
         List<Transform> currentMovementSpots = new();
 
         if (currentRoomIndex == 0)
@@ -262,11 +296,18 @@ public class MonsterBehavior : MonoBehaviour
         }
 
         //Randomly select a movement spot
-        int i = UnityEngine.Random.Range(0, currentMovementSpots.Count);
+        int i = Random.Range(0, currentMovementSpots.Count);
 
         currentState = MonsterState.Moving;
         agent.SetDestination(currentMovementSpots[i].position);
         currentPathingTarget = currentMovementSpots[i];
+    }
+
+    private void StartGameOver()
+    {
+        GameObject.Find("Game Handler").GetComponent<GameStartEnd>().GameOver();
+        audioHandler.PlayMonsterRoar();
+        
     }
 
 #if UNITY_EDITOR
